@@ -1,43 +1,55 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, inject, NgZone, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, inject, NgZone, PLATFORM_ID, Renderer2, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-// Import FormBuilder and FormGroup for reactive forms
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { environment } from '../../environments/environments';
 
 // This tells TypeScript that the 'google' object will exist at runtime.
 declare const google: any;
 
+// --- Custom Validator Function ---
+// This function checks if the drop-off date is after the collection date.
+export function dateOrderValidator(control: AbstractControl): ValidationErrors | null {
+  const collectionDate = control.get('collectionDate')?.value;
+  const dropoffDate = control.get('dropoffDate')?.value;
+  
+  if (collectionDate && dropoffDate && new Date(dropoffDate) < new Date(collectionDate)) {
+    return { dateOrder: true }; // Return an error if drop-off is before collection
+  }
+  
+  return null; // No error
+};
+
+
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './contact.component.html',
-  styleUrl: './contact.component.css'
+  styleUrls: ['./contact.component.css']
 })
-export class ContactComponent implements AfterViewInit {
+export class ContactComponent implements AfterViewInit, OnDestroy {
   @ViewChild('pickupAddressInput') pickupAddressElement!: ElementRef;
   @ViewChild('dropoffAddressInput') dropoffAddressElement!: ElementRef;
 
   private platformId = inject(PLATFORM_ID);
   private ngZone = inject(NgZone);
-  private fb = inject(FormBuilder); // Inject FormBuilder
+  private fb = inject(FormBuilder);
   private renderer = inject(Renderer2);
 
   private mapsScriptId = 'google-maps-script';
   private scriptLoaded = false;
 
-  contactForm: FormGroup; // Property to hold our form
+  contactForm: FormGroup;
 
-  // Listeners for cleaning up later
   private pickupListener!: () => void;
   private dropoffListener!: () => void;
 
   constructor() {
-    // Initialize the form in the constructor, matching your HTML order
     this.contactForm = this.fb.group({
-      fullName: ['', Validators.required],
+      fullName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern('^\\+?[0-9\\s]{10,15}$')]], // UK-friendly phone pattern
       pickupAddress: ['', Validators.required],
       dropoffAddress: ['', Validators.required],
       collectionDate: ['', Validators.required],
@@ -45,53 +57,56 @@ export class ContactComponent implements AfterViewInit {
       dropoffDate: ['', Validators.required],
       dropoffTime: ['', Validators.required],
       enquiryType: ['swb', Validators.required]
-    });
+    }, { validators: dateOrderValidator }); // Add the custom validator to the whole form
   }
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Set up listeners to load the script on the first focus
       this.pickupListener = this.renderer.listen(this.pickupAddressElement.nativeElement, 'focus', () => this.loadMapsAndInit());
       this.dropoffListener = this.renderer.listen(this.dropoffAddressElement.nativeElement, 'focus', () => this.loadMapsAndInit());
     }
   }
+  
+  // Helper getter to easily access form controls in the template
+  get f() { return this.contactForm.controls; }
 
-  // --- Form submission handler ---
   onSubmit() {
     if (this.contactForm.valid) {
       const formValue = this.contactForm.value;
-
-      // Format the dates
       const collectionDateFormatted = this.formatDate(formValue.collectionDate);
       const dropoffDateFormatted = this.formatDate(formValue.dropoffDate);
 
-      // Log the formatted data to the console
       console.log('Form Submitted!', {
         ...formValue,
         collectionDate: collectionDateFormatted,
         dropoffDate: dropoffDateFormatted
       });
+      // Here you would typically send the data to your backend service
+      // e.g., this.myApiService.sendQuote(this.contactForm.value).subscribe(...)
+      alert('Quote request sent successfully!');
+      this.contactForm.reset();
 
     } else {
+      // Mark all fields as touched to display validation errors
+      this.contactForm.markAllAsTouched();
       console.log('Form is invalid');
     }
   }
 
-  // --- Date formatting helper ---
   private formatDate(dateString: string): string {
     if (!dateString) return '';
     const [year, month, day] = dateString.split('-');
     return `${day}-${month}-${year}`;
   }
 
-  // --- Existing Maps logic ---
   private loadMapsAndInit(): void {
     if (this.scriptLoaded) return;
     this.loadGoogleMaps().then(() => {
       this.scriptLoaded = true;
       this.ngZone.run(() => this.initializeAutocomplete());
-      this.pickupListener();
-      this.dropoffListener();
+      // Clean up listeners once the script is loaded
+      if (this.pickupListener) this.pickupListener();
+      if (this.dropoffListener) this.dropoffListener();
     }).catch(err => console.error('Error loading Google Maps script:', err));
   }
 
@@ -115,8 +130,20 @@ export class ContactComponent implements AfterViewInit {
   private initializeAutocomplete(): void {
     if (this.pickupAddressElement && this.dropoffAddressElement) {
       const options = { componentRestrictions: { country: "uk" }, fields: ["address_components", "geometry", "icon", "name"], strictBounds: false };
-      new google.maps.places.Autocomplete(this.pickupAddressElement.nativeElement, options);
-      new google.maps.places.Autocomplete(this.dropoffAddressElement.nativeElement, options);
+      
+      const pickupAutocomplete = new google.maps.places.Autocomplete(this.pickupAddressElement.nativeElement, options);
+      pickupAutocomplete.addListener('place_changed', () => {
+        this.ngZone.run(() => {
+            this.contactForm.controls['pickupAddress'].setValue(this.pickupAddressElement.nativeElement.value);
+        });
+      });
+
+      const dropoffAutocomplete = new google.maps.places.Autocomplete(this.dropoffAddressElement.nativeElement, options);
+      dropoffAutocomplete.addListener('place_changed', () => {
+        this.ngZone.run(() => {
+            this.contactForm.controls['dropoffAddress'].setValue(this.dropoffAddressElement.nativeElement.value);
+        });
+      });
     }
   }
 

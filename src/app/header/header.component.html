@@ -1,17 +1,24 @@
 <header>
   <div class="container">
-    <img src="assets/images/Logo.png" alt="Stobart Logo" class="logo">
+    <img src="assets/images/Logo.png" alt="Stobart Logo" class="logo" routerLink="/home">
 
-    <h2>07576 068 987 <br> bookings&#64;stobart-transport.co.uk</h2>
+    
+    <div class="desktop-contact-info">
+      07576 068 987 <br> bookings&#64;stobart-transport.co.uk
+    </div>
 
     <button class="menu-toggle" (click)="toggleMenu()">
       &#9776; </button>
 
     <nav [ngClass]="{ 'is-open': isMenuOpen }">
       <a routerLink="/home" routerLinkActive="active" (click)="toggleMenu()">Home</a>
-      <a routerLink="/services" routerLinkActive="active" (click)="toggleMenu()">Services</a>
-      <a routerLink="/contact" routerLinkActive="active" (click)="toggleMenu()">Contact</a>
+      <a routerLink="/contact" routerLinkActive="active" (click)="toggleMenu()">Get a quote</a>
       <a routerLink="/privacy-policy" routerLinkActive="active" (click)="toggleMenu()">Privacy Policy</a>
+      
+      <div class="mobile-contact-info">
+        07576 068 987 <br> bookings&#64;stobart-transport.co.uk
+      </div>
     </nav>
+
   </div>
 </header>

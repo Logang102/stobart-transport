@@ -11,6 +11,8 @@ h2 {
   text-align: center;
   color: #00083e;
   margin-bottom: 10px;
+  margin-top: -50px;
+  font-size: 50px;
 }
 
 p {
@@ -106,4 +108,23 @@ button[type="submit"]:hover {
   .form-row .form-group {
     flex: 1; /* Make each field take up equal space */
   }
+}
+
+/* Style for invalid input fields */
+.form-group input.is-invalid,
+.form-group select.is-invalid {
+  border-color: #dc3545; /* A standard red for errors */
+}
+
+/* Style for the error message text */
+.error-message {
+  color: #dc3545;
+  font-size: 0.875em;
+  margin-top: 5px;
+}
+
+/* For form-wide errors */
+.form-error {
+    margin-bottom: 20px;
+    text-align: center;
 }

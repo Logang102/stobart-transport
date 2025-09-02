@@ -4,14 +4,10 @@ header {
     border-bottom: 1px solid #dee2e6;
 }
 
-h2 {    
-    color: white;
-    text-align: center;
-}
-
 .logo {
-    height: 100px;
+    height: 60px;
     width: auto;
+    cursor: pointer;
 }
 
 .container {
@@ -24,16 +20,18 @@ h2 {
     position: relative;
 }
 
-/* --- Navigation --- */
+/* --- Desktop Styles --- */
 nav {
     display: flex;
+    align-items: center;
 }
 
 nav a {
-    margin-left: 20px;
+    margin-left: 25px;
     text-decoration: none;
     color: #ffffff;
     font-weight: bold;
+    font-size: 1rem;
 }
 
 nav a:hover {
@@ -45,22 +43,42 @@ nav a:hover {
     text-decoration: underline;
 }
 
-/* --- Hamburger Menu --- */
-.menu-toggle {
+/* Updated styles for desktop contact info */
+.desktop-contact-info {
+    color: white;
+    text-align: center; /* Center align the text */
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+/* Hide mobile-specific elements on desktop */
+.menu-toggle,
+.mobile-contact-info {
     display: none;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #ffffff;
 }
 
 /* --- Mobile Styles --- */
 @media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
+    /* On mobile, revert to space-between for just logo and button */
+    .container {
+        justify-content: space-between;
     }
 
+    /* Show hamburger, hide desktop contact */
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: #ffffff;
+    }
+
+    .desktop-contact-info {
+        display: none;
+    }
+
+    /* Style the mobile navigation container */
     nav {
         display: none;
         flex-direction: column;
@@ -82,5 +100,16 @@ nav a:hover {
         text-align: center;
         padding: 15px;
         border-bottom: 1px solid #1a2a6c;
+        width: 100%;
+    }
+
+    /* Show and style the mobile contact info */
+    .mobile-contact-info {
+        display: block;
+        color: #ffffff;
+        text-align: center;
+        padding: 15px;
+        font-weight: bold;
+        line-height: 1.5;
     }
 }

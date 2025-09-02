@@ -1,0 +1,197 @@
+/* Using :host to scope styles to this component */
+:host {
+  display: block;
+  text-align: center;
+}
+
+/* Re-using the .container class from your global styles.css for consistency */
+.home-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+h1, h2, h3 {
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  color: #00083e; /* Matching your header color */
+}
+
+p {
+  line-height: 1.6;
+  color: #5a6a7a; /* A slightly softer text color */
+}
+
+section {
+  padding: 3rem 0;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+  padding-top: 1rem;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  letter-spacing: 1px;
+}
+
+.hero-section .subtitle {
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: #3b71ca; /* A modern blue for buttons */
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background-color: #3260ab;
+}
+
+/* --- Vehicles Section --- */
+.vehicles-section h2, .how-it-works-section h2 {
+  font-size: 2rem;
+}
+
+.vehicles-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.vehicle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: #333;
+}
+
+.vehicle-item svg {
+  width: 64px;
+  height: 64px;
+  color: #00083e; /* Matching your header color */
+}
+
+.vehicle-item span {
+  font-weight: 500;
+}
+
+.vehicles-section .section-subtitle {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* --- How It Works --- */
+.how-it-works-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.step-card {
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #f8f9fa;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background-color: #00083e;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 auto 1rem auto;
+}
+
+.step-card h3 {
+  font-size: 1.25rem;
+}
+
+.step-card ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+  text-align: left;
+  display: inline-block;
+}
+
+.step-card ul li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.step-card ul li svg {
+  width: 20px;
+  height: 20px;
+  color: #28a745; /* Green checkmark */
+  flex-shrink: 0;
+}
+
+/* --- Final CTA --- */
+.final-cta-section {
+  padding-bottom: 1rem;
+}
+
+.final-cta-section p {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  .how-it-works-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 1rem 0.5rem;
+  }
+  section {
+    padding: 2rem 0;
+  }
+  .hero-section h1 {
+    font-size: 1.8rem;
+  }
+  .vehicles-grid {
+    gap: 1rem;
+  }
+  .vehicle-item svg {
+    width: 48px;
+    height: 48px;
+  }
+}
