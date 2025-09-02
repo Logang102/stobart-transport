@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  googleMapsApiKey: 'AIzaSyDDhhtRdAJzBYmHlBhxdQ5uTrWmRyg19Js'
+  googleMapsApiKey: 'API Key Here'
 };
