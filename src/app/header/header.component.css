@@ -4,6 +4,11 @@ header {
     border-bottom: 1px solid #dee2e6;
 }
 
+h2 {    
+    color: white;
+    text-align: center;
+}
+
 .logo {
     height: 100px;
     width: auto;
