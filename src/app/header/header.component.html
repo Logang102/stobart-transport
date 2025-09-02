@@ -1,0 +1,15 @@
+<header>
+  <div class="container">
+    <img src="assets/images/Logo.png" alt="Stobart Logo" class="logo">
+
+    <button class="menu-toggle" (click)="toggleMenu()">
+      &#9776; </button>
+
+    <nav [ngClass]="{ 'is-open': isMenuOpen }">
+      <a routerLink="/home" routerLinkActive="active" (click)="toggleMenu()">Home</a>
+      <a routerLink="/services" routerLinkActive="active" (click)="toggleMenu()">Services</a>
+      <a routerLink="/contact" routerLinkActive="active" (click)="toggleMenu()">Contact</a>
+      <a routerLink="/privacy-policy" routerLinkActive="active" (click)="toggleMenu()">Privacy Policy</a>
+    </nav>
+  </div>
+</header>

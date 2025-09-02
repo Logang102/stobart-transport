@@ -1,1 +1,58 @@
-/* You can add global styles to this file, and also import other style files */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.hero {
+    position: relative;
+    color: white;
+    text-align: center;
+}
+
+.hero video {
+    width: 100%;
+}
+
+.hero .hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.recruitment {
+    text-align: center;
+    padding: 50px 0;
+}
+
+.logistics-services .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.news .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
